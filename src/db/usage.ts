@@ -1,6 +1,7 @@
 import { db } from "./db";
 
 const insertUsage = db.query(`INSERT INTO usage(key,time) VALUES ($key,$time)`)
+const usageView = db.query(`SELECT time FROM usage WHERE key=$key`)
 
 export async function registerUsage(key: string) {
     const time = new Date().toISOString().replace('T', ' ').substring(0, 19)
@@ -11,11 +12,21 @@ export async function registerUsage(key: string) {
     }
 }
 
+export async function usageForKey(key: string) {
+    try {
+        const usage = usageView.all({ $key: key })
+        return usage
+    } catch (error) {
+        throw error
+    }
+}
+
 export type Country = {
     name: { common: string },
     capital: string[],
     languages: Record<string, string>,
     flag: string
+    currencies: Record<string, { name: string }>
 }
 
 export function formatJSON(data: Country[]) {
@@ -24,7 +35,8 @@ export function formatJSON(data: Country[]) {
             name: d.name.common,
             capital: d.capital[0],
             languages: Object.values(d.languages),
-            flag: d.flag
+            flag: d.flag,
+            currency: Object.values(d.currencies)[0]?.name
         }
     })
 }

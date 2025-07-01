@@ -22,5 +22,17 @@ db.run(`
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         key TEXT NOT NULL,
         time DATETIME NOT NULL 
-      )  
+      );  
     `)
+
+db.run(`
+      CREATE TABLE IF NOT EXISTS session (
+        id TEXT PRIMARY KEY,
+        expiryAt DATETIME NOT NULL,
+        userId TEXT NOT NULL,
+        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+      );
+    `)
+
+
+

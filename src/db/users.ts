@@ -1,7 +1,8 @@
 import { db } from "./db"
+import { createSession } from "./session"
 
 export type User = {
-    id: number
+    id: string
     email: string
     password: string
     isAdmin: number
@@ -12,6 +13,8 @@ export type ApiKey = {
     expireAt: Date
     userId: string
 }
+
+
 
 const insertToUsers = db.query(`INSERT INTO users(id,email,password,isAdmin) VALUES ($id,$email,$password,$isAdmin)`)
 const insertApiKey = db.query(`INSERT INTO api_keys(key,expiryAt,userId) VALUES ($key,$expiryAt,$userId) RETURNING *`)
@@ -66,10 +69,14 @@ export async function loginUser(email: string, password: string) {
         if (!await Bun.password.verify(password, user.password)) {
             throw new Error("Invalid Credentials")
         }
+
+        const session = await createSession(user.id);
+
         return {
             id: user.id,
             email: user.email,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            session
         }
     } catch (error) {
         throw error
