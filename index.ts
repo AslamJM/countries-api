@@ -7,7 +7,8 @@ const REST_COUNTRIES_URL = "https://restcountries.com/v3.1/independent?status=tr
 
 
 const server = Bun.serve({
-    port: 3000,
+    port: 3001,
+
 
     routes: {
 
@@ -128,7 +129,20 @@ const server = Bun.serve({
                 await registerUsage(apiKey);
                 return Response.json(formatJSON(data))
             }
-        }
+        },
+
+        "/social": {
+            GET: async (req) => {
+                const res = await fetch(REST_COUNTRIES_URL)
+                const data = await res.json() as Country[]
+                const r = new Response(JSON.stringify(formatJSON(data)))
+                r.headers.set('Access-Control-Allow-Origin', '*');
+                r.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                return r;
+            }
+        },
+
+
     }
 })
 
