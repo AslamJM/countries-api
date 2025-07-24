@@ -3,7 +3,7 @@ import { formatJSON, registerUsage, usageForKey, type Country } from "./src/db/u
 import { getAllUsers, isAdmin, loginUser, registerApiKey, registerUser } from "./src/db/users";
 import { validateRegister } from "./src/lib/auth";
 
-const REST_COUNTRIES_URL = "https://restcountries.com/v3.1/independent?status=true&fields=languages,capital,name,currencies,flag"
+const REST_COUNTRIES_URL = "https://restcountries.com/v3.1/independent?status=true&fields=languages,capital,name,currencies,flags"
 
 
 const server = Bun.serve({

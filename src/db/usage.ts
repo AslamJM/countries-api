@@ -25,7 +25,7 @@ export type Country = {
     name: { common: string },
     capital: string[],
     languages: Record<string, string>,
-    flag: string
+    flags: {svg:string}
     currencies: Record<string, { name: string }>
 }
 
@@ -35,7 +35,7 @@ export function formatJSON(data: Country[]) {
             name: d.name.common,
             capital: d.capital[0],
             languages: Object.values(d.languages),
-            flag: d.flag,
+            flag: d.flags.svg,
             currency: Object.values(d.currencies)[0]?.name
         }
     })
